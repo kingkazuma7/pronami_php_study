@@ -25,3 +25,9 @@ $ vendor/bin/phinx migrate
 # Rollback
 $ vendor/bin/phinx rollback
 ```
+# 参照
+- https://github.com/budougumi0617/pronami_php
+
+# 起動
+- `docker-compose up`
+- `docker-compose down`
