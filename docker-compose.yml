@@ -15,6 +15,7 @@ services:
       - "8888:80"
   mysql:
       image: mysql:5.7
+      platform: linux/amd64
       container_name: mysql_pronami_shop
       environment:
         MYSQL_ROOT_PASSWORD: root
@@ -29,3 +30,6 @@ services:
       - ./db/sql:/docker-entrypoint-initdb.d
       ports:
         - "33056:3306"
+  # db:
+    # platform: linux/x86_64
+    # image: mysql:5.7
