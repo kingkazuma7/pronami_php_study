@@ -1,58 +1,80 @@
 <?php
-declare(strict_types=1);
-
-require_once $_ENV['APACHE_DOCUMENT_ROOT'] . '/common.php';
-
-sessionCheck();
-
-function validate(string $name, string $pass, string $pass2): bool
-{
-    $valid = true;
-
-    if ($name === '') {
-        $valid = false;
-        echo 'スタッフ名が入力されていません。<br/>';
-    } else {
-        echo "スタッフ名:${name}<br/>";
-    }
-    if ($pass == '') {
-        $valid = false;
-        echo 'パスワードが入力されていません。<br/>';
-    }
-    if ($pass != $pass2) {
-        $valid = false;
-        echo 'パスワードが一致しません。<br/>';
-    }
-
-    return $valid;
-}
-
-$staff_name = h($_POST['name']);
-$staff_pass = h($_POST['pass']);
-$staff_pass2 = h($_POST['pass2']);
+session_start();
+session_regenerate_id(true);
+// if(isset($_SESSION['login']) == false)
+// {
+//     print'ログインされていません。<br />';
+//     print'<a href="../staff_login/staff_login.html">ログイン画面へ</a>';
+//     exit();
+// }
+// else
+// {
+//     print $_SESSION['staff_name'];
+//     print 'さんログイン中<br />';
+//     print '<br />';
+// }
 ?>
-<!doctype html>
-<html lang="ja">
+
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>ろくまる農園</title>
+<meta charset="UTF-8">
+<title>ONE PIECE農園</title>
 </head>
 <body>
-<? if (validate($staff_name, $staff_pass, $staff_pass2)): ?>
-    <? $staff_pass = md5($staff_pass) ?>
-    <form action="staff_add_done.php" method="post">
-        <? // HTMLタグ内で変数を展開する ?>
-        <input type="hidden" name="name" value="<? echo $staff_name ?>">
-        <input type="hidden" name="pass" value="<? echo $staff_pass ?>">
-        <br/>
-        <input type="button" onclick="history.back()" value="戻る">
-        <input type="submit" value="OK">
-    </form>
 
-<? else: ?>
-    <form>
-        <input type="button" onclick="history.back()" value="戻る">
-    </form>
-<? endif; ?>
+<?php
+require_once(dirname(__FILE__) . '/../common/common.php');
+
+$post=sanitize($_POST);
+$staff_name=$post['name'];
+$staff_pass=$post['pass'];
+$staff_pass2=$post['pass2'];
+
+if($staff_name=='')
+{
+  // staff_nameがからだったら
+  print'スタッフ名が入力されていません。<br />';
+}
+else
+{
+  // staff_nameが存在したら
+  print'スタッフ名: ';
+  print $staff_name;
+  print '<br />';
+  print'Staff neme: ';
+  print $staff_name;
+  print '<br />';
+}
+
+
+if($staff_pass=='')
+{
+  print'パスワードが入力されていません。<br />';
+}
+
+if($staff_pass!==$staff_pass2)
+{
+  print'パスワードが一致しません。<br />';
+}
+
+if($staff_name==''||$staff_pass==''||$staff_pass!=$staff_pass2)
+{
+  print'<form>';
+  print'<input type="button" onclick="history.back()"value="戻る">';
+  print'</form>';
+}
+else
+{
+  $staff_pass=md5($staff_pass);
+  print'<form method="post" action="staff_add_done.php">';
+  print'<input type="hidden" name="name" value="'.$staff_name.'">';
+  print'<input type="hidden" name="pass" value="'.$staff_pass.'">';
+  print'<br />';
+  print'<input type="button" onclick="history.back()" value="戻る">';
+  print'<input type="submit" value="OK">';
+  print'</form>';
+}
+?>
 </body>
 </html>
